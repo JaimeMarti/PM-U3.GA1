@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:u3_ga1/counties.dart';
+import 'package:go_router/go_router.dart';
 import 'package:u3_ga1/main.dart';
 import 'data.dart';
 
 class ProvincesPage extends StatelessWidget {
-  final String title;
-
-  const ProvincesPage({super.key, required this.title});
+  const ProvincesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomBar(context, title),
+      appBar: CustomBar(context, 'Provinces'),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background.jpg"),
+            image: AssetImage("assets/background.png"),
             fit: BoxFit.cover
           )
         ),
@@ -27,18 +25,15 @@ class ProvincesPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const SizedBox(height: 16.0),
-                ...provincies["provincies"].map((province) {
+                ...Iterable<int>.generate(provincies["provincies"].length).map((index) {
+                  Map<String, dynamic> province = provincies["provincies"][index];
                   return Padding(
-                    padding: EdgeInsets.only(bottom: 16.0),
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          "/counties",
-                          arguments: CountiesArgs(province)
-                        );
+                        context.push("/counties/$index");
                       },
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       icon: CircleAvatar(
                         backgroundImage: NetworkImage(province["img"]),
                         radius: 80.0,
@@ -59,7 +54,7 @@ class ProvincesPage extends StatelessWidget {
                       )
                     )
                   );
-                }).toList()
+                })
               ],
             ),
           ),

@@ -1,34 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:u3_ga1/data.dart';
 import 'package:u3_ga1/main.dart';
 
 class CountiesPage extends StatelessWidget {
-  final String title;
+  final int province;
 
-  const CountiesPage({super.key, required this.title});
+  const CountiesPage({super.key, required this.province});
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as CountiesArgs;
-
+    List<dynamic> comarques = provincies["provincies"][province]["comarques"];
     return Scaffold(
-      appBar: CustomBar(context, "Comarques de ${args.province["provincia"]}"),
+      appBar: CustomBar(context, "Comarques de ${provincies["provincies"][province]["provincia"]}"),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 16.0),
-            ...args.province["comarques"].map((county) {
+            ...Iterable<int>.generate(comarques.length).map((index) {
+              Map<String, dynamic> county = comarques[index];
               return Padding(
-                padding: EdgeInsets.only(bottom: 4.0),
+                padding: const EdgeInsets.only(bottom: 4.0),
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      "/county_info_1",
-                      arguments: CountyArgs(county)
-                    );
+                    context.push("/county/$province/$index");
                   },
-                  padding: EdgeInsets.all(0.0),
+                  padding: const EdgeInsets.all(0.0),
                   icon: Stack(
                   children: [
                     Image.network(
@@ -41,7 +39,7 @@ class CountiesPage extends StatelessWidget {
                       alignment: Alignment.bottomLeft,
                       height: 120,
                       child: Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Text(
                           county["comarca"],
                           style: const TextStyle(
@@ -62,7 +60,7 @@ class CountiesPage extends StatelessWidget {
                 ),
                 ),
               );
-            }).toList()
+            })
           ],
         ),
       )

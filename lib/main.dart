@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'info_comarca_1.dart';
-import 'info_comarca_2.dart';
-import 'counties.dart';
-import 'provinces.dart';
+import 'package:u3_ga1/config/router/routes.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,39 +12,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Comarcas',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: "/",
-      routes: {
-        "/": (context) => const MyHomePage(title: 'Comarcas'),
-        "/provinces": (context) => const ProvincesPage(title: 'Provinces'),
-        "/counties": (context) => const CountiesPage(title: 'Counties'),
-        "/county_info_1": (context) => const CountyInfo1Page(title: 'County'),
-        "/county_info_2": (context) => const CountyInfo2Page(title: 'County'),
-      },
+    return MaterialApp.router(
+      routerConfig: router
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  final String title;
-
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
+        title: const Text('Comarcas'),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/background.jpg"),
+            image: AssetImage("assets/background.png"),
             fit: BoxFit.cover
           )
         ),
@@ -67,11 +55,12 @@ class MyHomePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 32.0,
                     fontFamily: "Lobster",
-                    color: Color(0xFF0607090)
+                    color: Color(0xFF607090)
                   ),
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
+                  controller: usernameController,
                   decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -81,6 +70,7 @@ class MyHomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
+                  controller: passwordController,
                   decoration: const InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -90,14 +80,28 @@ class MyHomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/provinces");
-                    },
-                    child: const Text("Next"),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        context.push("/provinces");
+                      },
+                      child: const Text("Log in"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Future<RegisterData?> future = registerDialog(context);
+                        future.then((data) {
+                          if(data != null) {
+                            usernameController.text = data.username;
+                            passwordController.text = data.password;
+                          }
+                        });
+                      },
+                      child: const Text("Register"),
+                    )
+                  ]
                 )
               ],
             ),
@@ -109,15 +113,101 @@ class MyHomePage extends StatelessWidget {
 }
 
 class CustomBar extends AppBar {
-  CustomBar(BuildContext context, String title): super(
-    backgroundColor: Color(0x50FFFFFF),
+  CustomBar(BuildContext context, String title, {super.key}): super(
+    backgroundColor: const Color(0x50FFFFFF),
     title: Padding(
-      padding: EdgeInsets.only(right: 50),
+      padding: const EdgeInsets.only(right: 50),
       child: Center(child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(fontFamily: "Lobster"),
+        style: const TextStyle(fontFamily: "Lobster"),
       ))
     ),
   );
+}
+
+Future<RegisterData?> registerDialog(BuildContext context) {
+  return showDialog<RegisterData>(
+    context: context,
+    builder: (BuildContext context) {
+      TextEditingController usernameController = TextEditingController();
+      TextEditingController passwordController = TextEditingController();
+
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 230.0
+            ),
+            child: Column(
+              children: [
+                const Text(
+                  "Registre",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontFamily: "Lobster"
+                  ),
+                ),
+                const SizedBox(height: 32.0),
+                TextFormField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Nom d\'usuari',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Contrasenya',
+                    prefixIcon: Icon(Icons.password),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        context.pop(RegisterData(
+                          username: usernameController.text,
+                          password: passwordController.text
+                        ));
+                      },
+                      child: const Text("Registra't"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.pop(null);
+                      },
+                      child: const Text("Cancel·la"),
+                    )
+                  ]
+                )
+              ],
+            )
+          )
+        )
+      );
+    }
+  );
+}
+
+class RegisterData {
+  String username;
+  String password;
+
+  RegisterData({required this.username, required this.password});
 }
