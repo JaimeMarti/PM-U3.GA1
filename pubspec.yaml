@@ -58,7 +58,11 @@ flutter:
   assets:
     - assets/background.png
     - assets/sun-solid.svg
+    - assets/cloud-sun-solid.svg
     - assets/cloud-sun-rain-solid.svg
+    - assets/moon-solid.svg
+    - assets/cloud-moon-solid.svg
+    - assets/cloud-moon-rain-solid.svg
     - assets/temperature-half-solid.svg
     - assets/wind-solid.svg
   fonts:
