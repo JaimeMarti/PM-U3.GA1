@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "92670418386",
+    "firebase_url": "https://u6-pa1-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "u6-pa1",
+    "storage_bucket": "u6-pa1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92670418386:android:32b3c7bc0ee16d2bab3c0b",
+        "android_client_info": {
+          "package_name": "com.example.u3_ga1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDsLoskxmp3xz9CG2FZGxiKQhzqic20Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92670418386:android:a92a26c2d897fd06ab3c0b",
+        "android_client_info": {
+          "package_name": "com.example.u6_pa1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDsLoskxmp3xz9CG2FZGxiKQhzqic20Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

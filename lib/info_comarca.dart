@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:u3_ga1/data.dart';
 import 'package:u3_ga1/info_comarca_1.dart';
 import 'package:u3_ga1/info_comarca_2.dart';
 import 'package:u3_ga1/main.dart';
+import 'package:u3_ga1/util.dart';
 
 class CountyInfo extends StatefulWidget {
   final int province;
@@ -27,7 +29,64 @@ class _CountyInfoState
       CountyInfo2Page(county: comarca)
     ];
     return Scaffold(
-      appBar: CustomBar(context, comarca["comarca"]),
+      appBar: CustomBar(
+        context, 
+        comarca["comarca"],
+        actions: [
+          StreamBuilder(
+            stream: isFavoriteStream(widget.province, widget.county),
+            builder: (context, snapshot) {
+              bool? isFavorite = snapshot.data;
+              if(isFavorite != null) {
+                if(isFavorite) {
+                  return IconButton(
+                    icon: SvgPicture.asset(
+                      "assets/heart-crack-solid.svg",
+                      width: 34.0
+                    ),
+                    onPressed: () {
+                      loadingDialog(
+                        context,
+                        removeFavorite(widget.province, widget.county)
+                          .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text("La comarca ha sido eliminada de la lista de favoritos")
+                            ));
+                          })
+                      );
+                    },
+                  );
+                }
+                else {
+                  return IconButton(
+                    icon: SvgPicture.asset(
+                      "assets/heart-solid.svg",
+                      width: 34.0
+                    ),
+                    onPressed: () {
+                      loadingDialog(
+                        context,
+                        addFavorite(widget.province, widget.county)
+                          .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text("La comarca se ha añadido a la lista de favoritos")
+                            ));
+                          })
+                      );
+                    },
+                  );
+                }
+              }
+              else if(snapshot.error != null) {
+                return const Text("Error");
+              }
+              else {
+                return const CircularProgressIndicator();
+              }
+            },
+          )
+        ]
+      ),
       body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // El índice de la pestaña seleccionada

@@ -12,7 +12,10 @@ class CountiesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<dynamic> comarques = provincies["provincies"][province]["comarques"];
     return Scaffold(
-      appBar: CustomBar(context, "Comarques de ${provincies["provincies"][province]["provincia"]}"),
+      appBar: CustomBar(
+        context, 
+        "Comarques de ${provincies["provincies"][province]["provincia"]}"
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
         child: ListView(

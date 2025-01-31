@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:u3_ga1/counties.dart';
+import 'package:u3_ga1/favorites.dart';
 import 'package:u3_ga1/info_comarca.dart';
 import 'package:u3_ga1/main.dart';
 import 'package:u3_ga1/provinces.dart';
@@ -9,12 +10,19 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: 'home',
       path: '/',
-      builder: (context, state) => const MyHomePage(),
+      builder: (context, state) => const MainPage(),
     ),
     GoRoute(
       name: 'provinces',
       path: '/provinces',
       builder: (context, state) => const ProvincesPage(),
+    ),
+    GoRoute(
+      name: 'favorites',
+      path: '/favorites',
+      builder: (context, state) {
+        return const FavoritesPage();
+      }
     ),
     GoRoute(
       name: 'counties',
